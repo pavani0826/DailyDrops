@@ -1,0 +1,6 @@
+{
+  "name": "Daily Drop - Hydration Tracker & Habit Companion",
+  "description": "A delightful hydration companion with personalized goals, cute water sprite mascot, streak tracking, friend challenges, and timely reminders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
