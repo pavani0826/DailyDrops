@@ -8,6 +8,7 @@ export const AuthScreen: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [signupSuccess, setSignupSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,20 +16,27 @@ export const AuthScreen: React.FC = () => {
     setError('');
     setLoading(true);
 
-    if (isSignUp) {
-    const { data, error: signUpError } = await supabase.auth.signUp({
+      if (isSignUp) {
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: { name: name || email.split('@')[0] },
-        },
       });
       if (signUpError) {
         setError(signUpError.message);
         setLoading(false);
         return;
       }
-  
+      if (data.user) {
+        await supabase.from('profiles').insert({
+          id: data.user.id,
+          name: name || email.split('@')[0],
+        });
+      }
+      if (!data.session) {
+        setSignupSuccess(true);
+        setLoading(false);
+        return;
+      }
     } else {
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
@@ -44,13 +52,29 @@ export const AuthScreen: React.FC = () => {
   };
 
   return (
+     {signupSuccess ? (
+        <div className="max-w-sm w-full text-center">
+          <Droplets className="w-10 h-10 text-blue-500 mb-3 mx-auto" />
+          <h2 className="text-lg font-black text-blue-950">Check your email</h2>
+          <p className="text-slate-400 text-sm mt-2">
+            We sent a confirmation link to <span className="font-semibold text-slate-600">{email}</span>. Click it to activate your account, then come back and log in.
+          </p>
+          <button
+            onClick={() => { setSignupSuccess(false); setIsSignUp(false); }}
+            className="mt-5 text-blue-600 text-sm font-bold"
+          >
+            Back to login
+          </button>
+        </div>
+      ) : (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-sky-50 to-white px-5">
       <div className="max-w-sm w-full">
         <div className="flex flex-col items-center mb-8">
           <Droplets className="w-10 h-10 text-blue-500 mb-2" />
           <h1 className="text-2xl font-black text-blue-950">Daily Drop</h1>
           <p className="text-slate-400 text-sm">{isSignUp ? 'Create your account' : 'Welcome back'}</p>
-        </div>
+              )}
+          </div>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           {isSignUp && (
