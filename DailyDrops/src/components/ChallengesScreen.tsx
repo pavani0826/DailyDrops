@@ -7,6 +7,7 @@ import { soundManager } from '../utils/audio';
 import confetti from 'canvas-confetti';
 import { supabase } from '../utils/supabaseClient';
 import { createChallenge, joinChallengeByCode, sendNudge } from '../utils/challengeService';
+import { sendPushNotification } from '../utils/pushService';
 
 interface ChallengesScreenProps {
   profile: UserProfile;
@@ -208,6 +209,7 @@ export const ChallengesScreen: React.FC<ChallengesScreenProps> = ({
     setNudgeSent(true);
     try {
       await sendNudge(activeChallenge.id, userId, buddy.id, 'Stay hydrated buddy! 💧');
+      sendPushNotification(buddy.id, 'Daily Drop 💧', `${profile.name} nudged you: Stay hydrated buddy!`);
       setNudgeFeedback(`Nudge sent to ${buddy.name}! 💧`);
     } catch {
       setNudgeFeedback('Could not send nudge — try again.');

@@ -30,3 +30,18 @@ export const subscribeToPush = async (userId: string) => {
 
   return subscription;
 };
+export const sendPushNotification = async (userId: string, title: string, body: string) => {
+  try {
+    await fetch('https://wdcxnmtwgpdumjbdzdmv.supabase.co/functions/v1/send-push', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ userId, title, body }),
+    });
+  } catch (err) {
+    // Fail silently — push is a bonus, shouldn't break the nudge flow if it fails
+    console.error('Push notification failed:', err);
+  }
+};
