@@ -16,21 +16,19 @@ export const AuthScreen: React.FC = () => {
     setLoading(true);
 
     if (isSignUp) {
-      const { data, error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: { name: name || email.split('@')[0] },
+        },
       });
       if (signUpError) {
         setError(signUpError.message);
         setLoading(false);
         return;
       }
-      if (data.user) {
-        await supabase.from('profiles').insert({
-          id: data.user.id,
-          name: name || email.split('@')[0],
-        });
-      }
+  
     } else {
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
