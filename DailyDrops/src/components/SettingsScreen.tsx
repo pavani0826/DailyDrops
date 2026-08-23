@@ -274,8 +274,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               className="text-xs bg-blue-50 border border-blue-200 rounded-xl px-2.5 py-1 font-bold text-blue-950 focus:outline-none"
             >
               <option value="1">Every 1 min</option>
-              <option value="2">Every 2 mins</option>
               <option value="5">Every 5 mins</option>
+              <option value="10">Every 20 mins</option>
+              <option value="30">Every 30 mins</option>
               <option value="45">Every 45 mins</option>
               <option value="60">Every 1 hour</option>
               <option value="90">Every 90 mins (Default)</option>

@@ -65,7 +65,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between px-5 pt-3 pb-2 select-none overflow-y-auto max-w-lg mx-auto w-full">
+      <div className="flex-1 flex flex-col justify-between px-5 pt-1 pb-2 select-none overflow-y-auto max-w-lg mx-auto w-full">
       {/* Top Section: Greeting & Sprite */}
       <div className="flex items-start justify-between relative mt-1">
         <div className="flex-1 pr-2 pt-1">
@@ -85,7 +85,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
           <WaterSprite
             avatar={profile.avatar}
             mood={getSpriteMood()}
-            size={130}
+            size={105}
             showRipples={true}
           />
         </div>
@@ -97,8 +97,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
           <CircularProgress
             currentMl={currentMl}
             goalMl={goalMl}
-            size={210}
-            strokeWidth={16}
+            size={175}
+            strokeWidth={14}
             color="#2563eb"
           />
         </div>
@@ -107,8 +107,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
       {/* Next Reminder Row Banner */}
       <button
         onClick={onOpenReminderSettings}
-        className="w-full bg-blue-50/70 hover:bg-blue-100/60 border border-blue-100 rounded-2xl p-3.5 flex items-center justify-between text-left transition-all duration-200 cursor-pointer shadow-xs mb-3 group"
-      >
+        className="w-full bg-blue-50/70 hover:bg-blue-100/60 border border-blue-100 rounded-2xl p-3 flex items-center justify-between text-left transition-all duration-200 cursor-pointer shadow-xs mb-2 group"
+        >
         <div className="flex items-center space-x-3">
           <div className="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform">
             <Bell className="w-4 h-4" />
@@ -130,8 +130,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
       </button>
 
       {/* Quick Water Logging Actions (3 cards in Bento style) */}
-      <div className="mb-3">
-        <div className="grid grid-cols-3 gap-2.5">
+       <div className="mb-2">
+        <div className="grid grid-cols-3 gap-2">
           {/* 250 ml */}
           <button
             onClick={() => {
