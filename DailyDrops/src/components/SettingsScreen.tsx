@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 import { subscribeToPush } from '../utils/pushService';
+import { supabase } from '../utils/supabaseClient';
 
 interface SettingsScreenProps {
   profile: UserProfile;
@@ -66,7 +67,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     return Math.round((base + bonus) / 50) * 50;
   };
 
-    const handleSave = () => {
+    const handleSave = async () => {
     const updated: UserProfile = {
       ...profile,
       name,
@@ -81,6 +82,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     };
     soundManager.setEnabled(soundEnabled);
     onUpdateProfile(updated);
+
+    await supabase
+      .from('profiles')
+      .update({
+        reminder_interval_minutes: reminderInterval,
+        notifications_enabled: notificationsEnabled,
+      })
+      .eq('id', userId);
+
     setSavedNotice(true);
     setTimeout(() => {
       window.location.reload();
