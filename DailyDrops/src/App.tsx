@@ -402,6 +402,7 @@ export default function App() {
             onOpenFeedback={() => setIsFeedbackModalOpen(true)}
             onResetData={handleResetData}
             onSignOut={handleSignOut}
+            userId={session?.user.id || ''}
           />
         )}
 

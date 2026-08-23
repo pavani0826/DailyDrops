@@ -18,6 +18,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
+import { subscribeToPush } from '../utils/pushService';
 
 interface SettingsScreenProps {
   profile: UserProfile;
@@ -25,6 +26,7 @@ interface SettingsScreenProps {
   onOpenFeedback: () => void;
   onResetData: () => void;
   onSignOut: () => void;
+  userId: string;
 }
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({
@@ -33,6 +35,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   onOpenFeedback,
   onResetData,
   onSignOut,
+  userId,
 }) => {
   const [name, setName] = useState(profile.name);
   const [dailyGoal, setDailyGoal] = useState(profile.dailyGoalMl);
@@ -92,6 +95,18 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         icon: '/icon-192.png',
       });
     });
+  };
+
+  const [pushStatus, setPushStatus] = useState('');
+
+  const handleEnablePush = async () => {
+    try {
+      await subscribeToPush(userId);
+      setPushStatus('Push notifications enabled!');
+    } catch (err: any) {
+      setPushStatus(err.message || 'Could not enable push');
+    }
+    setTimeout(() => setPushStatus(''), 3000);
   };
 
   const handleTestReminder = () => {
@@ -321,6 +336,15 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <Bell className="w-3.5 h-3.5 text-blue-600" />
             <span>Test a Water Reminder</span>
           </button>
+
+          <button
+            onClick={handleEnablePush}
+            className="w-full py-2.5 mt-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer border border-blue-200/60"
+          >
+            <Bell className="w-3.5 h-3.5" />
+            <span>Enable Push Notifications (works even when closed)</span>
+          </button>
+          {pushStatus && <p className="text-center text-xs text-blue-600 mt-1">{pushStatus}</p>}
         </div>
       </div>
 
