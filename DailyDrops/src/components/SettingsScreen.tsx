@@ -84,24 +84,28 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     }, 800);
   };
 
+    const showNotification = (title: string, body: string) => {
+    if (typeof Notification === 'undefined') return;
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.showNotification(title, {
+        body,
+        icon: '/icon-192.png',
+      });
+    });
+  };
+
   const handleTestReminder = () => {
     soundManager.playNudge();
-    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-      new Notification('Daily Drop Hydration Reminder 💧', {
-        body: `Time for a refreshing glass of water, ${name}! Your sprite is cheering for you.`,
-        icon: '/favicon.ico',
-      });
-    } else if (typeof Notification !== 'undefined' && Notification.permission !== 'denied') {
+    if (Notification.permission === 'granted') {
+      showNotification('Daily Drop Hydration Reminder 💧', `Time for a refreshing glass of water, ${name}! Your sprite is cheering for you.`);
+    } else if (Notification.permission !== 'denied') {
       Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
-          new Notification('Daily Drop Reminders Active! 💧', {
-            body: `We'll keep you hydrated throughout the day, ${name}!`,
-          });
+          showNotification('Daily Drop Reminders Active! 💧', `We'll keep you hydrated throughout the day, ${name}!`);
         }
       });
     }
   };
-
   return (
     <div className="flex-1 flex flex-col px-5 pt-3 pb-6 select-none overflow-y-auto max-w-lg mx-auto w-full">
       <div className="flex items-center justify-between mb-3">

@@ -55,17 +55,18 @@ export default function App() {
     const intervalMs = profile.reminderIntervalMinutes * 60 * 1000;
 
     const timer = setInterval(() => {
-      if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-        new Notification('Daily Drop 💧', {
-          body: `Time for a glass of water, ${profile.name}!`,
-          icon: '/icon-192.png',
+      if (typeof Notification !== 'undefined' && Notification.permission === 'granted' && navigator.serviceWorker) {
+        navigator.serviceWorker.ready.then((registration) => {
+          registration.showNotification('Daily Drop 💧', {
+            body: `Time for a glass of water, ${profile.name}!`,
+            icon: '/icon-192.png',
+          });
         });
       }
     }, intervalMs);
 
     return () => clearInterval(timer);
   }, [profile.notificationsEnabled, profile.reminderIntervalMinutes, profile.name]);
-
   const refreshChallenges = () => {
     if (!session) return;
     getMyChallenges(session.user.id).then((rows) => {
