@@ -55,6 +55,12 @@ export default function App() {
     const intervalMs = profile.reminderIntervalMinutes * 60 * 1000;
 
     const timer = setInterval(() => {
+      const hour = new Date().getHours();
+      const start = profile.activeStartHour ?? 8;
+      const end = profile.activeEndHour ?? 23;
+      const withinHours = start <= end ? hour >= start && hour < end : hour >= start || hour < end;
+      if (!withinHours) return;
+
       if (typeof Notification !== 'undefined' && Notification.permission === 'granted' && navigator.serviceWorker) {
         navigator.serviceWorker.ready.then((registration) => {
           registration.showNotification('Daily Drop 💧', {

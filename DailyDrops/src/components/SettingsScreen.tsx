@@ -46,6 +46,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   const [notificationsEnabled, setNotificationsEnabled] = useState(profile.notificationsEnabled);
   const [theme, setTheme] = useState(profile.theme);
   const [savedNotice, setSavedNotice] = useState(false);
+  const [activeStartHour, setActiveStartHour] = useState(profile.activeStartHour ?? 8);
+  const [activeEndHour, setActiveEndHour] = useState(profile.activeEndHour ?? 23);
 
   // Calculator state
   const [weightKg, setWeightKg] = useState(profile.weightKg || 60);
@@ -88,6 +90,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       .update({
         reminder_interval_minutes: reminderInterval,
         notifications_enabled: notificationsEnabled,
+        active_start_hour: activeStartHour,
+        active_end_hour: activeEndHour,
       })
       .eq('id', userId);
 
@@ -300,13 +304,43 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             >
               <option value="1">Every 1 min</option>
               <option value="5">Every 5 mins</option>
-              <option value="10">Every 20 mins</option>
+              <option value="600">Every 10 hours</option>
               <option value="30">Every 30 mins</option>
               <option value="45">Every 45 mins</option>
               <option value="60">Every 1 hour</option>
               <option value="90">Every 90 mins (Default)</option>
               <option value="120">Every 2 hours</option>
             </select>
+          </div>
+
+          {/* Active Hours Selector */}
+          <div className="flex items-center justify-between pt-1 border-t border-slate-100">
+            <span className="text-xs text-slate-600 font-bold">Active Hours</span>
+            <div className="flex items-center gap-1.5">
+              <select
+                value={activeStartHour}
+                onChange={(e) => setActiveStartHour(Number(e.target.value))}
+                className="text-xs bg-blue-50 border border-blue-200 rounded-xl px-2 py-1 font-bold text-blue-950 focus:outline-none"
+              >
+                {Array.from({ length: 24 }, (_, h) => (
+                  <option key={h} value={h}>
+                    {h === 0 ? '12 AM' : h < 12 ? `${h} AM` : h === 12 ? '12 PM' : `${h - 12} PM`}
+                  </option>
+                ))}
+              </select>
+              <span className="text-slate-400 text-xs">to</span>
+              <select
+                value={activeEndHour}
+                onChange={(e) => setActiveEndHour(Number(e.target.value))}
+                className="text-xs bg-blue-50 border border-blue-200 rounded-xl px-2 py-1 font-bold text-blue-950 focus:outline-none"
+              >
+                {Array.from({ length: 24 }, (_, h) => (
+                  <option key={h} value={h}>
+                    {h === 0 ? '12 AM' : h < 12 ? `${h} AM` : h === 12 ? '12 PM' : `${h - 12} PM`}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Sound Toggle */}

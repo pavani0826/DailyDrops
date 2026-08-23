@@ -67,6 +67,8 @@ export interface UserProfile {
   theme: 'ocean-mint' | 'deep-azure' | 'sunset-coral' | 'dark-aqua';
   weightKg?: number;
   activityLevel: 'low' | 'moderate' | 'high';
+  activeStartHour?: number;
+  activeEndHour?: number;
 }
 
 export interface FeedbackSubmission {
