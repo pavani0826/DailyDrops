@@ -63,7 +63,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     return Math.round((base + bonus) / 50) * 50;
   };
 
-  const handleSave = () => {
+    const handleSave = () => {
     const updated: UserProfile = {
       ...profile,
       name,
@@ -79,7 +79,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     soundManager.setEnabled(soundEnabled);
     onUpdateProfile(updated);
     setSavedNotice(true);
-    setTimeout(() => setSavedNotice(false), 2500);
+    setTimeout(() => {
+      window.location.reload();
+    }, 800);
   };
 
   const handleTestReminder = () => {
@@ -267,6 +269,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               onChange={(e) => setReminderInterval(Number(e.target.value))}
               className="text-xs bg-blue-50 border border-blue-200 rounded-xl px-2.5 py-1 font-bold text-blue-950 focus:outline-none"
             >
+              <option value="1">Every 1 min</option>
+              <option value="2">Every 2 mins</option>
+              <option value="5">Every 5 mins</option>
               <option value="45">Every 45 mins</option>
               <option value="60">Every 1 hour</option>
               <option value="90">Every 90 mins (Default)</option>
