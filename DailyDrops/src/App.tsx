@@ -271,8 +271,8 @@ export default function App() {
 
 
   return(
-    <div className="min-h-screen bg-[#F0F9FF] text-slate-800 font-sans flex flex-col items-center justify-start p-3 sm:p-6 overflow-x-auto selection:bg-blue-100">
-     <header className="w-full flex items-center justify-center mb-4 px-4">
+     <div className="min-h-screen bg-[#F0F9FF] text-slate-800 font-sans flex flex-col items-center justify-start p-2 sm:p-4 overflow-x-auto selection:bg-blue-100">
+     <header className="w-full flex items-center justify-center mb-2 px-4">
   <div className="flex items-center space-x-3">
     <div className="w-11 h-11 rounded-2xl bg-blue-600 shadow-md shadow-blue-500/25 flex items-center justify-center text-white">
       <Droplets className="w-6 h-6 fill-white/80" />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserProfile, DayProgress } from '../types';
 import { WaterSprite } from './WaterSprite';
 import { CircularProgress } from './CircularProgress';
@@ -22,6 +22,14 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
   onOpenReminderSettings,
   onUndoLast,
 }) => {
+  const [now, setNow] = useState(Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
   const currentMl = todayProgress.consumedMl;
   const goalMl = todayProgress.goalMl || profile.dailyGoalMl;
   const percentage = Math.round((currentMl / goalMl) * 100);
@@ -32,6 +40,11 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
     if (hour < 12) return 'Good morning';
     if (hour < 17) return 'Good afternoon';
     return 'Good evening';
+  };
+  // Calculate the actual next reminder time based on the real interval
+  const getNextReminderTime = () => {
+    const next = new Date(now + profile.reminderIntervalMinutes * 60 * 1000);
+    return next.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   };
 
   // Dynamic motivation text matching sprite's state
@@ -111,7 +124,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
         </div>
 
         <div className="flex items-center text-blue-600 font-bold text-xs sm:text-sm">
-          <span>Today at 2:00 PM</span>
+            <span>Today at {getNextReminderTime()}</span>
           <span className="ml-1.5 text-blue-400 text-xs">&gt;</span>
         </div>
       </button>
