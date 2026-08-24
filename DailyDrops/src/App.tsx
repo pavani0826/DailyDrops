@@ -49,30 +49,7 @@ export default function App() {
     return () => listener.subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!profile.notificationsEnabled) return;
-
-    const intervalMs = profile.reminderIntervalMinutes * 60 * 1000;
-
-    const timer = setInterval(() => {
-      const hour = new Date().getHours();
-      const start = profile.activeStartHour ?? 8;
-      const end = profile.activeEndHour ?? 23;
-      const withinHours = start <= end ? hour >= start && hour < end : hour >= start || hour < end;
-      if (!withinHours) return;
-
-      if (typeof Notification !== 'undefined' && Notification.permission === 'granted' && navigator.serviceWorker) {
-        navigator.serviceWorker.ready.then((registration) => {
-          registration.showNotification('Daily Drop 💧', {
-            body: `Time for a glass of water, ${profile.name}!`,
-            icon: '/icon-192.png',
-          });
-        });
-      }
-    }, intervalMs);
-
-    return () => clearInterval(timer);
-  }, [profile.notificationsEnabled, profile.reminderIntervalMinutes, profile.name]);
+ 
   const refreshChallenges = () => {
     if (!session) return;
     getMyChallenges(session.user.id).then((rows) => {
