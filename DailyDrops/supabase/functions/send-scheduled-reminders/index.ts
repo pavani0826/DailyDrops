@@ -29,6 +29,16 @@ Deno.serve(async (_req) => {
   for (const profile of profiles) {
     if (!profile.notifications_enabled) continue;
 
+    // Convert UTC time to IST (UTC+5:30) since active hours are set in Indian time
+    const istOffsetMinutes = 5.5 * 60;
+    const istTime = new Date(now.getTime() + istOffsetMinutes * 60 * 1000);
+    const currentHour = istTime.getUTCHours();
+    const startHour = profile.active_start_hour ?? 8;
+    const endHour = profile.active_end_hour ?? 23;
+
+    const isWithinActiveHours = currentHour >= startHour && currentHour < endHour;
+    if (!isWithinActiveHours) continue;
+
     const intervalMs = profile.reminder_interval_minutes * 60 * 1000;
     const lastSent = profile.last_reminder_sent ? new Date(profile.last_reminder_sent) : null;
 
