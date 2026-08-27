@@ -11,6 +11,9 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        strategies: 'injectManifest',
+        srcDir: 'src',
+        filename: 'sw.ts',
         includeAssets: ['icon-192.png', 'icon-512.png'],
         manifest: {
           name: 'Daily Drop',
@@ -25,10 +28,8 @@ export default defineConfig(() => {
             { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
           ],
         },
-        workbox: {
+        injectManifest: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-          skipWaiting: true,
-          clientsClaim: true,
         },
       }),
     ],
